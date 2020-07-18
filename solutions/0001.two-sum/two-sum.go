@@ -9,7 +9,6 @@ func TwoSum(nums []int, target int) []int {
 		} else {
 			record[value] = index
 		}
-
 	}
 	return nil
 }
