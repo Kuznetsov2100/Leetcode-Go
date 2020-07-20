@@ -35,6 +35,7 @@ https://leetcode-cn.com/problems/longest-palindromic-subsequence/
 s 只包含小写英文字母
 ```
 
+<<<<<<< HEAD
 ## 解题思路
 
 状态:  
@@ -54,3 +55,8 @@ dp[i][j]表示 s 的第 i 个字符到第 j 个字符组成的子串中，最长
 
 结果:  
 dp[0][n - 1]
+=======
+## 关键点
+
+dp[i][j]的含义：在子串 s[i..j] 中，最长回文子序列的长度为dp[i][j]
+>>>>>>> 49432ccf590018bdf2800703846c7456ddb29837
