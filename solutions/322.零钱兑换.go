@@ -6,12 +6,12 @@
 
 // @lc code=start
 func coinChange(coins []int, amount int) int {
+	// dp[i]: 凑足金额i,至少需要dp[i]种硬币
 	dp := make([]int, amount+1)
 	for i := range dp {
-		dp[i] = amount + 1
+		dp[i] = amount + 1 // amount+1 means infinity
 	}
-	// base case
-	dp[0] = 0
+	dp[0] = 0 // base case
 	for i := 1; i <= amount; i++ {
 		for _, coin := range coins {
 			if i-coin < 0 {
