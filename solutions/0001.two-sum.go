@@ -13,6 +13,13 @@ package solutions
 所以返回 [0, 1]
 */
 
+/************解题思路**************/
+/*
+求和转换为求差
+借助map将数组中每个元素及其索引相互对应
+以空间换时间，将查找时间从 O(N) 降低到 O(1)
+*/
+
 func TwoSum0001(nums []int, target int) []int {
 	record := make(map[int]int)
 	for index, value := range nums {

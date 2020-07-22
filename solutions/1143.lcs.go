@@ -30,6 +30,12 @@ package solutions
 输入的字符串只含有小写英文字符。
 */
 
+/************解题思路**************/
+/*
+方法：动态规划
+
+*/
+
 func LongestCommonSubsequence1143(text1 string, text2 string) int {
 	m, n := len(text1), len(text2)
 	dp := make([][]int, m+1)

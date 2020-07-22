@@ -13,9 +13,14 @@ package solutions
 输入: coins = [2], amount = 3
 输出: -1
 
-
 说明:
 你可以认为每种硬币的数量是无限的。
+*/
+
+/************解题思路**************/
+/*
+方法：动态规划
+dp[i]的含义：凑足金额i至少需要的硬币种数
 */
 
 func CoinChange0322(coins []int, amount int) int {
