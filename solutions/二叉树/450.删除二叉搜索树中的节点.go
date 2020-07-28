@@ -13,13 +13,6 @@
  *     Right *TreeNode
  * }
  */
-
-// 1.Save a link to the node to be deleted in t
-// 2.Set root to point to its successor min(t.right).
-// 3.Set the right link of root (which is supposed to point to the BST containing all the keys larger than root.Val)
-//   to deleteMin(t.right), the link to the BST containing all the keys that are larger than root.Val after the deletion.
-// 4.Set the left link of root (which was null) to t.Left
-//   (all the keys that are less than both the deleted key and its successor).
 func deleteNode(root *TreeNode, key int) *TreeNode {
 	if root == nil {
 		return nil
@@ -35,9 +28,13 @@ func deleteNode(root *TreeNode, key int) *TreeNode {
 		if root.Left == nil {
 			return root.Right
 		}
-		t := root
-		root = min(t.Right)
-		root.Right = deleteMin(t.Right)
+		t := root // 用变量t存储待删除的节点root
+		root = min(t.Right) // 将root指向它的后继节点(二叉搜索树中为右子树中的最小节点)
+		// 将root的右链接（原本指向一棵所有结点都大于min(t.Right).Val的二叉查找树指向
+		//deleteMin(t.right)，也就是在删除后所有结点仍然都大于root.Val的子二叉查找树；
+		root.Right = deleteNode(t.Right, root.Val)
+		// 将root的左链接（本为空）设为t.Left
+	    //（其下所有的键都小于被删除的结点和它的后继结点）。
 		root.Left = t.Left
 	}
 	return root
@@ -51,17 +48,6 @@ func min(x *TreeNode) *TreeNode {
 		return x
 	}
 	return min(x.Left)
-}
-
-// For delete the minimum,
-// we go left until finding a node that that has a null left link
-// and then replace the link to that node by its right link.
-func deleteMin(x *TreeNode) *TreeNode {
-	if x.Left == nil {
-		return x.Right
-	}
-	x.Left = deleteMin(x.Left)
-	return x
 }
 // @lc code=end
 
