@@ -14,22 +14,18 @@
  * }
  */
 func preorderTraversal(root *TreeNode) []int {
-	if root == nil {
-		return nil
-	}
 	var res []int
-	preorder(root, &res)
-	return res
-}
-
-func preorder(x *TreeNode, res *[]int) *TreeNode {
-	if x == nil {
-		return nil
+	var preorder func(x *TreeNode)
+	preorder = func(x *TreeNode) {
+		if x == nil {
+			return
+		}
+		res = append(res, x.Val)
+		preorder(x.Left)
+		preorder(x.Right)
 	}
-	*res = append(*res, x.Val)
-	preorder(x.Left, res)
-	preorder(x.Right, res)
-	return x
+	preorder(root)
+	return res
 }
 // @lc code=end
 
