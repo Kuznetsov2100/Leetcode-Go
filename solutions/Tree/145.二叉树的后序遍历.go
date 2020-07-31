@@ -14,22 +14,18 @@
  * }
  */
 func postorderTraversal(root *TreeNode) []int {
-	if root == nil {
-		return nil
-	}
 	var res []int
-	postorder(root, &res)
-	return res
-}
-
-func postorder(x *TreeNode, res *[]int) *TreeNode {
-	if x == nil {
-		return nil
+	var postorder func(x *TreeNode)
+	postorder = func(x *TreeNode) {
+		if x == nil {
+			return
+		}
+		postorder(x.Left)
+		postorder(x.Right)
+		res = append(res, x.Val)
 	}
-	postorder(x.Left, res)
-	postorder(x.Right, res)
-	*res = append(*res, x.Val)
-	return x
+	postorder(root)
+	return res
 }
 // @lc code=end
 
