@@ -13,12 +13,11 @@
  *     Right *TreeNode
  * }
  */
- import "math"
 func isBalanced(root *TreeNode) bool {
 	if root == nil {
 		return true
 	}
-	if math.Abs(float64(maxDepth(root.Left)-maxDepth(root.Right))) > 1.0 {
+	if abs(maxDepth(root.Left)-maxDepth(root.Right)) > 1 {
 		return false
 	} 
 	return isBalanced(root.Left) && isBalanced(root.Right)
@@ -39,6 +38,13 @@ func max(x, y int) int {
 		return x
 	}
 	return y
+}
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
 }
 // @lc code=end
 
