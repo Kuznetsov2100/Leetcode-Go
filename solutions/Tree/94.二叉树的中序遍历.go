@@ -14,24 +14,18 @@
  * }
  */
 func inorderTraversal(root *TreeNode) []int {
-	if root == nil {
-		return nil
+	var res []int
+	var inorder func(x *TreeNode)
+	inorder = func(x *TreeNode)	{
+		if x == nil {
+			return
+		}
+		inorder(x.Left)
+		res = append(res, x.Val)
+		inorder(x.Right)
 	}
-	var res []int	
-	inorder(root, &res)
+	inorder(root)
 	return res
-}
-
-// The pointer to a slice is indispensable when the function is going to modify the structure,
-// the size, or the location in memory of the slice and every change should to be visible
-// to those who call the function
-func inorder(x *TreeNode, res *[]int) {
-	if x == nil {
-		return
-	}
-	inorder(x.Left, res)
-	*res = append(*res, x.Val)
-	inorder(x.Right, res)
 }
 // @lc code=end
 
