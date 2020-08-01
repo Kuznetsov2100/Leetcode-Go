@@ -29,19 +29,19 @@ func sortedListToBST(head *ListNode) *TreeNode {
 		array = append(array, head.Val)
 		head = head.Next
 	}
-	return buildTree(array,0, len(array)-1)
-}
-
-func buildTree(nums []int, lo, hi int) *TreeNode {
-	if lo > hi {
-		return nil
+	var buildTree func(lo,hi int) *TreeNode
+	buildTree = func(lo, hi int) *TreeNode {
+		if lo > hi {
+			return nil
+		}
+		mid := lo + (hi-lo)/2
+		return &TreeNode{
+			Val: array[mid],
+			Left: buildTree(lo, mid-1),
+			Right: buildTree(mid+1, hi),
+		}
 	}
-	mid := lo + (hi-lo)/2
-	return &TreeNode{
-		Val: nums[mid],
-		Left: buildTree(nums,lo, mid-1),
-		Right: buildTree(nums,mid+1, hi),
-	}
+	return buildTree(0, len(array)-1)
 }
 // @lc code=end
 
