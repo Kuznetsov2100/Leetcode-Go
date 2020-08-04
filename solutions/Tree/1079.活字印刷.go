@@ -7,14 +7,9 @@
 // @lc code=start
 import "sort"
 func numTilePossibilities(tiles string) int {
-	// 将大写字母编码成1..26的数字
-	alpha := make([]int,26)
 	nums := make([]int, len(tiles))
-	for i := range alpha {
-		alpha[i] = i+1
-	}
 	for i := range tiles {
-		nums[i] = alpha[tiles[i]-65]
+		nums[i] = int(tiles[i])
 	}
 
 	// 求出含有重复数字的所有可能的子集
