@@ -12,28 +12,29 @@ func combinationSum(candidates []int, target int) [][]int {
 		return res
 	}
 	sort.Ints(candidates)
-	var backtrack func(sum int, track []int)
-	backtrack = func(sum int, track []int) {
-		if sum == target && sort.IntsAreSorted(track) {
+	var backtrack func(sum, pre int, track []int)
+	backtrack = func(sum, pre int, track []int) {
+		if sum == target {
 			tmp := make([]int, len(track))
 			copy(tmp, track)	
 			res = append(res, tmp)
-			return
-			
-			
+			return		
 		}
-		for i := 0; i < len(candidates); i++ {		
+		for i := 0; i < len(candidates); i++ {
+			if candidates[i] < pre {
+				continue
+			}
 			sum += candidates[i]
 			if sum > target {
 				continue
 			}
 			track = append(track, candidates[i])
-			backtrack(sum, track)
+			backtrack(sum,candidates[i],track)
 			track = track[:len(track)-1]
 			sum -= candidates[i]					
 		}
 	}
-	backtrack(0,[]int{})
+	backtrack(0,-101, []int{})
 	return res
 }
 // @lc code=end
