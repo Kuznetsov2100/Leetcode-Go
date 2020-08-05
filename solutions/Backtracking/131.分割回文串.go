@@ -10,6 +10,17 @@ func partition(s string) [][]string {
 	if s == "" {
 		return res
 	}
+	isPalindrome := func(s string) bool {
+		i, j := 0, len(s)-1
+		for i < j {
+			if s[i] != s[j] {
+				return false
+			}
+			i++
+			j--
+		}
+		return true
+	}
 	var backtrack func(str string, track []string)
 	backtrack = func(str string, track []string) {
 		if str == "" && len(track) > 0 {
@@ -26,25 +37,12 @@ func partition(s string) [][]string {
 				continue
 			}
 			track = append(track, str[:i])
-			
 			backtrack(str[i:],track)
 			track = track[:len(track)-1]
 		}
 	}
 	backtrack(s,[]string{})
 	return res
-}
-
-func isPalindrome(s string) bool {
-	i, j := 0, len(s)-1
-	for i < j {
-		if s[i] != s[j] {
-			return false
-		}
-		i++
-		j--
-	}
-	return true
 }
 // @lc code=end
 
