@@ -8,9 +8,6 @@
 import "sort"
 func combinationSum(candidates []int, target int) [][]int {
 	var res [][]int
-	if len(candidates) == 0 {
-		return res
-	}
 	sort.Ints(candidates)
 	var backtrack func(sum, pre int, track []int)
 	backtrack = func(sum, pre int, track []int) {
