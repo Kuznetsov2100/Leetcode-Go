@@ -8,9 +8,6 @@
 import "sort"
 func combinationSum2(candidates []int, target int) [][]int {
 	var res [][]int
-	if len(candidates) == 0 {
-		return res
-	}
 	sort.Ints(candidates)
 	used := make([]bool, len(candidates))
 	var backtrack func(start, sum int, track []int)
