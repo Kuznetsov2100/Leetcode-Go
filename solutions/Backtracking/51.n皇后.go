@@ -47,7 +47,10 @@ func solveNQueens(n int) [][]string {
 }
 func isValid(queenCol []int, row, col int) bool {
 	for i := 0; i < row; i++ {
-		if col == queenCol[i] || abs(row - i) == abs(col - queenCol[i]) {
+		if col == queenCol[i] {
+			return false
+		}
+		if abs(row - i) == abs(col - queenCol[i]) {
 			return false
 		}
 	}
