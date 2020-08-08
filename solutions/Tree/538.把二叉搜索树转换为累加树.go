@@ -17,13 +17,13 @@ func convertBST(root *TreeNode) *TreeNode {
 	var sum int
 	var reverse func(root *TreeNode)
 	reverse = func(root *TreeNode) {
-		if root == nil {
-			return
+		if root != nil {
+			reverse(root.Right)
+			sum += root.Val
+			root.Val = sum
+			reverse(root.Left)
 		}
-		reverse(root.Right)
-		sum += root.Val
-		root.Val = sum
-		reverse(root.Left)
+		
 	}
 	reverse(root)
 	return root
