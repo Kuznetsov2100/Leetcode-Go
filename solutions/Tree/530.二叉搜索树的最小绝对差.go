@@ -23,9 +23,7 @@ func getMinimumDifference(root *TreeNode) int {
 		}
 		inorder(x.Left)
 		if pre != nil {
-			if m := abs(x.Val - pre.Val); m < minvalue {
-				minvalue = m
-			}
+			minvalue = min(minvalue,x.Val-pre.Val)
 		}
 		pre = x
 		inorder(x.Right)
@@ -34,11 +32,11 @@ func getMinimumDifference(root *TreeNode) int {
 	return minvalue
 }
 
-func abs(x int) int {
-	if x < 0 {
-		return -x
+func min(x, y int) int {
+	if x < y {
+		return x
 	}
-	return x
+	return y
 }
 // @lc code=end
 
