@@ -6,7 +6,7 @@
 
 // @lc code=start
 import "strconv"
-func calculate(s string) int {	
+func calculate(s string) int {
 	var M,Q []string
 	precedence := map[string]int{
 		"(": 0,
@@ -16,36 +16,33 @@ func calculate(s string) int {
 		"/": 2,
 	}
 	operand := 0
+	pushOperand := func() {
+		if operand != 0 {
+			Q = append(Q, strconv.Itoa(operand))
+			operand = 0
+		}
+	}
 	for i := range s {	
 		if s[i] >= '0' && s[i] <= '9' {
 			if i == 0 && s[i] == '0' {
 				Q = append(Q, "0")
-			} else if i > 0 && s[i] == '0' && !isNumber(string(s[i-1])) {
+			} else if i > 0 && s[i] == '0' && (s[i-1] < '0' || s[i-1] > '9') {
 				Q = append(Q, "0")
 			} else {
 				operand = 10 * operand + int(s[i]- '0')
 			}
 		} else if s[i] == '(' {
-			if operand != 0 {
-				Q = append(Q, strconv.Itoa(operand))
-				operand = 0
-			}
+			pushOperand()
 			M = append(M, string(s[i]))
 		} else if s[i] == ')' {
-			if operand != 0 {
-				Q = append(Q, strconv.Itoa(operand))
-				operand = 0
-			}
+			pushOperand()
 			for len(M) > 0 && M[len(M)-1] != "(" {
 				Q = append(Q, M[len(M)-1])
 				M = M[:len(M)-1]		
 			}
 			M = M[:len(M)-1]
 		} else if s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/' {
-			if operand != 0 {
-				Q = append(Q, strconv.Itoa(operand))
-				operand = 0
-			}
+			pushOperand()
 			for len(M) > 0 && precedence[M[len(M)-1]] >= precedence[string(s[i])]  {
 				Q = append(Q, M[len(M)-1])
 				M = M[:len(M)-1]		
@@ -53,14 +50,10 @@ func calculate(s string) int {
 			M = append(M,string(s[i]))
 		} 
 		if i == len(s)-1 {	
-			if operand != 0 {
-				Q = append(Q, strconv.Itoa(operand))
-				operand = 0
-			}
+			pushOperand()
 		}
 	}
-	if e := Q[len(Q)-1]; len(M) == 0 && isNumber(e) {
-		num, _ := strconv.Atoi(e)
+	if num, ok := isNumber(Q[len(Q)-1]); len(M) == 0 && ok {
 		return num
 	}
 	for len(M) > 0 {
@@ -70,10 +63,9 @@ func calculate(s string) int {
 	return evalRPN(Q)
 }
 
-
-func isNumber(s string) bool {
-	_, err := strconv.Atoi(s)
-	return err == nil
+func isNumber(s string) (int, bool) {
+	num, err := strconv.Atoi(s)
+	return num, err == nil
 }
 
 func evalRPN(tokens []string) int {
