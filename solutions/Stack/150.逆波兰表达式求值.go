@@ -7,32 +7,22 @@
 // @lc code=start
 func evalRPN(tokens []string) int {
 	var stack []int
-	for len(tokens) > 0 {
-		element := tokens[0]
-		tokens = tokens[1:]
+	for i := range tokens {
+		element := tokens[i]
 		if element != "+" && element != "-" && element != "*" && element != "/" {
 			num, _ := strconv.Atoi(element)
 			stack = append(stack, num)			
 		} else {
-			if element == "+" {
-				numA := stack[len(stack)-1]
-				numB := stack[len(stack)-2]
-				stack = stack[:len(stack)-2]
+			numA := stack[len(stack)-1]
+			numB := stack[len(stack)-2]
+			stack = stack[:len(stack)-2]
+			if element == "+" {	
 				stack = append(stack, numB+numA)
 			} else if element == "-" {
-				numA := stack[len(stack)-1]
-				numB := stack[len(stack)-2]
-				stack = stack[:len(stack)-2]
 				stack = append(stack, numB-numA)
 			} else if element == "*" {
-				numA := stack[len(stack)-1]
-				numB := stack[len(stack)-2]
-				stack = stack[:len(stack)-2]
 				stack = append(stack, numB*numA)
 			} else if element == "/" {
-				numA := stack[len(stack)-1]
-				numB := stack[len(stack)-2]
-				stack = stack[:len(stack)-2]
 				stack = append(stack, numB/numA)
 			}
 		}
