@@ -6,6 +6,7 @@
 
 // @lc code=start
 import "strconv"
+import "bytes"
 func calculate(s string) int {
 	var M,Q []string
 	precedence := map[string]int{
@@ -15,46 +16,37 @@ func calculate(s string) int {
 		"*": 2,
 		"/": 2,
 	}
-	operand := 0
-	pushOperand := func() {
-		if operand != 0 {
-			Q = append(Q, strconv.Itoa(operand))
-			operand = 0
-		}
-	}
-	for i := range s {	
-		if s[i] >= '0' && s[i] <= '9' {
-			if i == 0 && s[i] == '0' {
-				Q = append(Q, "0")
-			} else if i > 0 && s[i] == '0' && (s[i-1] < '0' || s[i-1] > '9') {
-				Q = append(Q, "0")
-			} else {
-				operand = 10 * operand + int(s[i]- '0')
+	var operand bytes.Buffer
+	for i := 0; i < len(s); i++ {	
+		if s[i] >= '0' && s[i] <= '9' {	
+			for ;i < len(s) && s[i] >= '0' && s[i] <= '9'; i++ {
+				operand.WriteByte(s[i])
 			}
+			Q = append(Q, operand.String())
+			operand.Reset()
+			i--
 		} else if s[i] == '(' {
-			pushOperand()
 			M = append(M, string(s[i]))
 		} else if s[i] == ')' {
-			pushOperand()
 			for len(M) > 0 && M[len(M)-1] != "(" {
 				Q = append(Q, M[len(M)-1])
 				M = M[:len(M)-1]		
 			}
 			M = M[:len(M)-1]
 		} else if s[i] == '+' || s[i] == '-' || s[i] == '*' || s[i] == '/' {
-			pushOperand()
 			for len(M) > 0 && precedence[M[len(M)-1]] >= precedence[string(s[i])]  {
 				Q = append(Q, M[len(M)-1])
 				M = M[:len(M)-1]		
 			}
 			M = append(M,string(s[i]))
-		} 
-		if i == len(s)-1 {	
-			pushOperand()
+		} else {
+			continue
 		}
 	}
-	if num, ok := isNumber(Q[len(Q)-1]); len(M) == 0 && ok {
-		return num
+	if len(M) == 0 {
+		if num, ok := isNumber(Q[len(Q)-1]); ok {
+			return num
+		}
 	}
 	for len(M) > 0 {
 		Q = append(Q, M[len(M)-1])
