@@ -7,29 +7,30 @@
 // @lc code=start
 import "strings"
 func minWindow(s string, t string) string {
-	left, right, start, match := 0, 0, 0, 0
-	minlen := 1 << 63 - 1 
+	// 窗口[left,right)左闭右开
+	left, right, match := 0, 0, 0
+	start, minlen := 0, 1 << 63 - 1 // 记录最小子串在s中开始的索引及长度
 	window := make(map[byte]int) // 记录窗口字符串中各字符出现的次数
 	counter := make(map[byte]int) // 记录字符串t中各字符出现的次数
 	for i := range t {
 		counter[t[i]]++
 	}
 	for right < len(s) {
-		char := s[right]
-		if _, ok := counter[char]; ok { 
+		char := s[right] // 可能要移入窗口的字符
+		if _, ok := counter[char]; ok {
 			window[char]++
 			if window[char] == counter[char] {
 				match++ // 如果s[right]在window和counter中出现的次数相同，则符合要求的字符数+1
 			}
 		}
 		right++
-		// 如果符合要求的字符数等于字符串t的长度，说明window中的字符串为一个可行解，现在要右移left缩小窗口优化可行解
+		// 判断窗口左侧是否需要收缩
 		for match == len(counter) {
 			if right - left < minlen { // 如果找到一个更优解，更新最小字串在字符串s中开始的索引和长度
 				start = left
 				minlen = right - left
 			}
-			char := s[left]
+			char := s[left] // 可能要移出窗口的字符
 			if _, ok := counter[char]; ok {
 				window[char]--
 				if window[char] < counter[char] {
