@@ -6,34 +6,39 @@
 
 // @lc code=start
 func findAnagrams(s string, p string) []int {
-	lens,lenp := len(s),len(p)
-	if lens < lenp {
-		return nil
-	}
+	// 窗口[left,right)左闭右开
+	left, right, match := 0, 0, 0
 	var res []int
-	for i := 0; i < lens-lenp+1; i++ {
-		if isAnagram(s[i:lenp+i],p) {
-			res = append(res, i)
+	window := make(map[byte]int) // 记录窗口字符串中各字符出现的次数
+	counter := make(map[byte]int) // 记录字符串t中各字符出现的次数
+	for i := range p {
+		counter[p[i]]++
+	}
+	for right < len(s) {
+		char := s[right] // 可能要移入窗口的字符
+		if _, ok := counter[char]; ok {
+			window[char]++
+			if window[char] == counter[char] {
+				match++ // 如果s[right]在window和counter中出现的次数相同，则符合要求的字符数+1
+			}
+		}
+		right++
+		// 判断窗口左侧是否需要收缩
+		for match == len(counter) {
+			if right - left == len(p) {
+				res = append(res,left)
+			}
+			char := s[left] // 可能要移出窗口的字符
+			if _, ok := counter[char]; ok {
+				window[char]--
+				if window[char] < counter[char] {
+					match-- // 如果s[left]在window中出现的次数小于counter中的次数，则符合要求的字符数-1
+				}
+			}
+			left++
 		}
 	}
 	return res
-}
-
-func isAnagram(s string, t string) bool {
-	if len(s) != len(t) {
-		return false
-	}
-	count := make([]int,26)
-	for i := 0; i < len(s); i++ {
-		count[s[i]-97]++
-		count[t[i]-97]--
-	}
-	for _, v := range count {
-		if v != 0 {
-			return false
-		}
-	}
-	return true
 }
 // @lc code=end
 
