@@ -17,20 +17,20 @@ func findWords(words []string) []string {
 		'z': 3, 'x': 3, 'c': 3, 'v': 3, 'b': 3, 'n': 3, 'm': 3,
 	}
 	for i := range words {
-		cnt ,count := 0, 0
-		for j, w := range words[i] {
-			count++
+		cnt, j := 0, 0
+		for ; j < len(words[i]); j++ {
+			w := byte(words[i][j] | ' ') // 大写字母转成小写字母
 			if j == 0 {
-				cnt = keyboard[byte(w | ' ')] // 大写字母转成小写字母，得到映射值
+				cnt = keyboard[w] 
 			} else {
-				if keyboard[byte(w | ' ')] != cnt { // 如果该字符串后续字母的映射值不同于第一个，则break
+				if keyboard[w] != cnt { // 如果该字符串后续字母的映射值不同于第一个，则break
 					break
 				}
 			}
-			if count == len(words[i]) { // 如果count等于words[i]的长度，说明该字符串说有字母均处于同一行
-				res = append(res, words[i]) // 将该字符串添加到结果数组
-			}
-		}	
+		}
+		if j == len(words[i]) { // 如果j等于words[i]的长度，说明该字符串所有字母均处于同一行
+			res = append(res, words[i]) // 将该字符串添加到结果数组
+		}
 	}
 	return res
 }
