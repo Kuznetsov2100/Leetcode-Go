@@ -7,7 +7,6 @@
 // @lc code=start
 func searchInsert(nums []int, target int) int {
 	left, right := 0, len(nums)-1
-	res := -1
 	for left <= right {
 		mid := left + (right - left)/2
 		if nums[mid] < target {
@@ -15,18 +14,8 @@ func searchInsert(nums []int, target int) int {
 		} else if nums[mid] > target {
 			right = mid - 1
 		} else if nums[mid] == target {
-			res = mid
-			break
+			return mid
 		}
-	}
-	if res != -1 {
-		return res
-	}
-	if left == len(nums) {
-		return left
-	}
-	if right < 0 {
-		return right+1
 	}
 	return left
 }
