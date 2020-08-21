@@ -6,19 +6,20 @@
 
 // @lc code=start
 func getRow(rowIndex int) []int {
-	var res [][]int
+	var pre []int
 	for i := 0; i <= rowIndex; i++ {
 		arr := make([]int, i+1)
 		for j := 0; j <= i; j++ {
 			if j == 0 || j == i {
 				arr[j] = 1
 			} else {
-				arr[j] = res[i-1][j-1] + res[i-1][j]
+				arr[j] = pre[j-1] + pre[j]
 			}
 		}
-		res = append(res, arr)
+		pre = make([]int, i+1)
+		copy(pre, arr)
 	}
-	return res[rowIndex]
+	return pre
 }
 // @lc code=end
 
