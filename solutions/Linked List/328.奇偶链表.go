@@ -17,18 +17,14 @@ func oddEvenList(head *ListNode) *ListNode {
 		return head
 	}
 	odd, even := head, head.Next
-	node := head.Next
-	for odd != nil && even != nil {
-		if odd.Next.Next != nil {
-			odd.Next = odd.Next.Next
-			odd = odd.Next
-			even.Next = odd.Next
-			even = even.Next
-		} else {
-			break
-		}
+	evenhead := head.Next
+	for odd.Next != nil && even.Next != nil {
+		odd.Next = even.Next
+		odd = odd.Next
+		even.Next = odd.Next
+		even = even.Next
 	}
-	odd.Next = node
+	odd.Next = evenhead
 	return head
 }
 // @lc code=end
