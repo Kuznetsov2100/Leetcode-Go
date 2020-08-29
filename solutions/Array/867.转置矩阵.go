@@ -12,7 +12,8 @@ func transpose(A [][]int) [][]int {
 		res[i] = make([]int, row)
 	}
 	for i := 0; i < row*col; i++ {
-		res[i%col][i/col] = A[i/col][i%col]
+		r , c := i/col, i%col
+		res[c][r] = A[r][c]
 	}
 	return res
 }
