@@ -12,10 +12,26 @@ func transpose(A [][]int) [][]int {
 		res[i] = make([]int, row)
 	}
 	for i := 0; i < row*col; i++ {
-		r , c := i/col, i%col
-		res[c][r] = A[r][c]
-	}
+     r , c := i/col, i%col
+     res[c][r] = A[r][c]
+    }
 	return res
 }
+
+
+
+// func transpose(A [][]int) [][]int {
+// 	row, col := len(A), len(A[0])
+// 	res := make([][]int, col)
+// 	for i := range res {
+// 		res[i] = make([]int, row)
+// 	}
+// 	for i := 0; i < row; i++ {
+// 		for j := 0; j < col; j++ {
+// 			res[j][i] = A[i][j]
+// 		}
+// 	}
+// 	return res
+// }
 // @lc code=end
 
