@@ -6,6 +6,14 @@
 
 // @lc code=start
 import "container/heap"
+// 思路：
+// 维护一个最大堆，一个最小堆
+// 最大堆存储数据流值较小的一半元素，最小堆存储数据流值较大的一半元素
+// case 1: 数据流总元素个数为奇数，最大堆比最小堆多一个元素，中位数为最大堆的堆顶元素
+// case 2: 数据流总元素个数为偶数，最大堆与最小堆元素一样多，中位数为最大堆和最小堆的对顶元素之和的一半
+// 如何保持最大堆和最小堆的元素处于平衡状态(两个堆的元素个数之差最多为1)
+// 步骤：新元素添加到最大堆中，将最大堆的最大值移到最小堆中，
+//      如果最大堆的元素少与最小堆，将最小堆的最小值移到最大堆中
 type MedianFinder struct {
 	minheap *IntMinHeap
 	maxheap *IntMaxHeap
@@ -14,9 +22,8 @@ type MedianFinder struct {
 
 /** initialize your data structure here. */
 func Constructor() MedianFinder {
-	minh := &IntMinHeap{}
+	minh, maxh := &IntMinHeap{}, &IntMaxHeap{}
 	heap.Init(minh)
-	maxh := &IntMaxHeap{}
 	heap.Init(maxh)
 	return MedianFinder{minheap:minh, maxheap:maxh}
 }
@@ -48,7 +55,7 @@ func (h *IntMinHeap) Pop() interface{} {
 	old := *h
 	n := len(old)
 	x := old[n-1]
-	*h = old[0 : n-1]
+	*h = old[:n-1]
 	return x
 }
 
@@ -61,10 +68,9 @@ func (h *IntMaxHeap) Pop() interface{} {
 	old := *h
 	n := len(old)
 	x := old[n-1]
-	*h = old[0 : n-1]
+	*h = old[:n-1]
 	return x
 }
-
 /**
  * Your MedianFinder object will be instantiated and called as such:
  * obj := Constructor();
