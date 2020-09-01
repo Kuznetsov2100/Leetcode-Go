@@ -9,41 +9,39 @@ import "container/heap"
 func kthSmallest(matrix [][]int, k int) int {
 	var res int
 	n := len(matrix)
-	h := &IntMinHeap{&foo{value:matrix[0][0], row:0, col:0 }}
-	heap.Init(h)
 	visited := make([][]bool, n)
 	for i := range visited {
 		visited[i] = make([]bool, n)
 	}
+	h := &IntMinHeap{&point{value:matrix[0][0], row:0, col:0}}
+	heap.Init(h)
 	for k > 0 && h.Len() > 0 {
-		element := heap.Pop(h).(*foo)
+		element := heap.Pop(h).(*point)
 		i, j := element.row, element.col
-		if visited[i][j] {
-			continue
-		}
-		visited[i][j] = true
 		res = element.value
-		if i < n-1 {
-			heap.Push(h, &foo{value:matrix[i+1][j], row:i+1, col:j})
+		if i < n-1 && !visited[i+1][j] {
+			heap.Push(h, &point{value:matrix[i+1][j], row:i+1, col:j})
+			visited[i+1][j] = true
 		}
-		if j < n-1 {
-			heap.Push(h, &foo{value:matrix[i][j+1], row:i, col:j+1})
+		if j < n-1 && !visited[i][j+1] {
+			heap.Push(h, &point{value:matrix[i][j+1], row:i, col:j+1})
+			visited[i][j+1] = true
 		}
 		k--
 	}
 	return res
 }
 
-type foo struct {
+type point struct {
 	value int
 	row int
 	col int
 }
-type IntMinHeap []*foo
+type IntMinHeap []*point
 func (h IntMinHeap) Len() int           { return len(h) }
 func (h IntMinHeap) Less(i, j int) bool { return h[i].value < h[j].value }
 func (h IntMinHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
-func (h *IntMinHeap) Push(x interface{}) { *h = append(*h, x.(*foo)) }
+func (h *IntMinHeap) Push(x interface{}) { *h = append(*h, x.(*point)) }
 func (h *IntMinHeap) Pop() interface{} {
 	old := *h
 	n := len(old)
