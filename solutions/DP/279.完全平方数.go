@@ -26,5 +26,30 @@ func min(x, y int) int {
 	}
 	return y
 }
+
+// BFS
+// func numSquares(n int) int {
+// 	queue := []int{n}
+// 	visited := make([]bool, n+1)
+// 	level := 0
+// 	for len(queue) != 0 {
+// 		level++
+// 		for n := len(queue); n > 0; n-- {
+// 			node := queue[0]
+// 			queue = queue[1:]
+// 			for j := 1; j*j <= node; j++ {
+// 				next := node - j*j
+// 				if next == 0 {
+// 					return level
+// 				}
+// 				if !visited[next] {
+// 					queue = append(queue, next)
+// 					visited[next] = true
+// 				}
+// 			}
+// 		}	
+// 	}
+// 	return -1
+// }
 // @lc code=end
 
