@@ -18,26 +18,26 @@ func findLongestWord(s string, d []string) string {
 	})
 	lens := len(s)
 	for i := range d {
-		if len(d[i]) > lens {
+		length := len(d[i])
+		if length > lens {
 			continue
 		}
-		if isSubsequence(d[i], s) {
+		if isSubsequence(d[i], s, length, lens) {
 			return d[i]
 		}
 	}
 	return ""
 }
 
-func isSubsequence(s string, t string) bool {
-	m, n := len(s), len(t)
+func isSubsequence(s string, t string, lens, lent int) bool {
 	indexS, indexT := 0, 0
-	for indexS < m && indexT < n {
+	for indexS < lens && indexT < lent {
 		if s[indexS] == t[indexT] {
 			indexS++
 		}
 		indexT++
 	}
-	return indexS == m
+	return indexS == lens
 }
 // @lc code=end
 
