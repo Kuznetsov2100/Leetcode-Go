@@ -5,17 +5,9 @@
  */
 
 // @lc code=start
+import "container/heap"
 func findLongestWord(s string, d []string) string {
-	sort.Slice(d, func(i, j int) bool {
-		if m, n := len(d[i]),len(d[j]); m > n {
-			return true
-		} else if m == n {
-			if d[i] < d[j] {
-				return true
-			}
-		}
-		return false
-	})
+	var candidate []string
 	lens := len(s)
 	for i := range d {
 		length := len(d[i])
@@ -23,10 +15,16 @@ func findLongestWord(s string, d []string) string {
 			continue
 		}
 		if isSubsequence(d[i], s, length, lens) {
-			return d[i]
+			candidate = append(candidate, d[i])
 		}
 	}
-	return ""
+	if len(candidate) == 0 {
+		return ""
+	}
+	h := make(MaxHeap, len(candidate))
+	copy(h,candidate)
+	heap.Init(&h)
+	return heap.Pop(&h).(string)
 }
 
 func isSubsequence(s string, t string, lens, lent int) bool {
@@ -38,6 +36,28 @@ func isSubsequence(s string, t string, lens, lent int) bool {
 		indexT++
 	}
 	return indexS == lens
+}
+
+type MaxHeap []string
+func (h MaxHeap) Len() int           { return len(h) }
+func (h MaxHeap) Less(i, j int) bool {
+	if m, n := len(h[i]),len(h[j]); m > n {
+		return true
+	} else if m == n {
+		if h[i] < h[j] {
+			return true
+		}
+	}
+	return false
+}
+func (h MaxHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *MaxHeap) Push(x interface{}) { *h = append(*h, x.(string)) }
+func (h *MaxHeap) Pop() interface{} {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[:n-1]
+	return x
 }
 // @lc code=end
 
