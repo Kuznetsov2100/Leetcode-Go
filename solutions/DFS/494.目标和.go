@@ -6,26 +6,24 @@
 
 // @lc code=start
 func findTargetSumWays(nums []int, S int) int {
-	var res int
-	var dfs func(i, track int)
-	dfs = func(i, track int) {
-		if i == len(nums) && track == 0 {
-			res++
-			return
-		}
+	// 深度优先搜索+备忘录
+	m := make(map[[2]int]int) // array in golang can be compared, so array can used as key in map
+	var dfs func(i, substraction int) int
+	dfs = func(i, substraction int) int {
 		if i == len(nums) {
-			return
+			if substraction == 0 {
+				return 1
+			}
+			return 0
 		}
-		track += nums[i]
-		dfs(i+1, track)
-		track -= nums[i]
-
-		track -= nums[i]
-		dfs(i+1, track)
-		track += nums[i]
+		if val, ok := m[[2]int{i, substraction}]; ok {
+			return val
+		}
+		ans := dfs(i+1, substraction+nums[i]) + dfs(i+1, substraction-nums[i])
+		m[[2]int{i, substraction}] = ans
+		return ans
 	}
-	dfs(0, S)
-	return res
+	return dfs(0, S)
 }
 // @lc code=end
 
