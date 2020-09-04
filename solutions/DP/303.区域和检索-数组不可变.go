@@ -12,23 +12,16 @@ type NumArray struct {
 
 func Constructor(nums []int) NumArray {
 	n := len(nums)
-	dp := make([]int, n)
+	dp := make([]int, n+1)
 	for i := 0; i < n; i++ {
-		if i == 0 {
-			dp[i] = nums[0]
-			continue
-		}
-		dp[i] = dp[i-1]+nums[i]
+		dp[i+1] = dp[i]+nums[i]
 	}
 	return NumArray{dp: dp}
 }
 
 
 func (this *NumArray) SumRange(i int, j int) int {
-	if i == 0 {
-		return this.dp[j]
-	}
-	return this.dp[j]-this.dp[i-1]
+	return this.dp[j+1]-this.dp[i]
 }
 
 
