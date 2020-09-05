@@ -5,13 +5,18 @@
  */
 
 // @lc code=start
+// 思路：原区间按照起始端点排序的，具有有序性
+// 首先利用二分搜索找到新区间应该插入到intervals的位置，
+// 然后用leetcode-56题的merge函数处理即可
 func insert(intervals [][]int, newInterval []int) [][]int {
-	return merge(append(intervals, newInterval))
+	if len(intervals) == 0 {
+		return [][]int{newInterval}
+	}
+	pos := searchInsert(intervals, newInterval[0])
+	return merge(append(intervals[:pos], append([][]int{newInterval}, intervals[pos:]...)...))
 }
 
 func merge(intervals [][]int) [][]int {
-	// 数组按照每个区间的左端点升序排序
-	sort.Slice(intervals, func(i, j int) bool { return intervals[i][0] < intervals[j][0] })
 	var res [][]int
 	for i := 0; i < len(intervals); {
 		rightbound := intervals[i][1] // 初始化区间的右端点
@@ -26,6 +31,21 @@ func merge(intervals [][]int) [][]int {
 		i = j
 	}
 	return res
+}
+
+func searchInsert(nums [][]int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		mid := left + (right - left)/2
+		if value := nums[mid][0]; value < target {
+			left = mid + 1
+		} else if value > target {
+			right = mid - 1
+		} else if value == target {
+			return mid
+		}
+	}
+	return left
 }
 // @lc code=end
 
