@@ -7,7 +7,8 @@
 // @lc code=start
 func findTargetSumWays(nums []int, S int) int {
 	// 深度优先搜索+备忘录
-	m := make(map[[2]int]int) // array in golang can be compared, so array can used as key in map
+	type pair [2]int
+	m := make(map[pair]int) // array in golang can be compared, so array can used as key in map
 	var dfs func(i, remainder int) int
 	dfs = func(i, remainder int) int {
 		if i == len(nums) {
@@ -16,11 +17,11 @@ func findTargetSumWays(nums []int, S int) int {
 			}
 			return 0
 		}
-		if val, ok := m[[2]int{i, remainder}]; ok {
+		if val, ok := m[pair{i, remainder}]; ok {
 			return val
 		}
 		ans := dfs(i+1, remainder+nums[i]) + dfs(i+1, remainder-nums[i])
-		m[[2]int{i, remainder}] = ans
+		m[pair{i, remainder}] = ans
 		return ans
 	}
 	return dfs(0, S)
