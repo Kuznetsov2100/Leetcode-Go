@@ -7,13 +7,17 @@
 // @lc code=start
 func findDuplicates(nums []int) []int {
 	var res []int
-	m := make(map[int]int)
-	for i := range nums {
-		m[nums[i]]++
+	n := len(nums)
+	for i := 0; i < n; i++ {
+		if nums[i] != i+1 {
+			for nums[i] != nums[nums[i]-1] {
+				nums[i], nums[nums[i]-1] = nums[nums[i]-1], nums[i]
+			}
+		}
 	}
-	for k, v := range m {
-		if v == 2 {
-			res = append(res, k)
+	for i := 0; i < n; i++ {
+		if nums[i] != i+1 {
+			res = append(res, nums[i])
 		}
 	}
 	return res
