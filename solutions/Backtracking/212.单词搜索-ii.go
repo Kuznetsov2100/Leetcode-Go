@@ -21,14 +21,14 @@ func findWords(board [][]byte, words []string) []string {
 		wordtrie.Insert(words[i])
 	}
 
-	visited := make([][]bool, m) // 防止重复搜索
+	visited := make([][]bool, m)  // 防止重复搜索
 	for i := range visited {
 		visited[i] = make([]bool, n)
 	}
 	
 	var dfs func(x, y int, word []byte) 
 	dfs = func(x, y int, word []byte) {
-		// 首先确保是棋盘内的合法坐标，其次该点没有访问过， 任一条件不满足，return
+		// 首先确保是棋盘内的合法坐标，其次该点没有访问过， 任一条件不满足,  return
 		if (x < 0 || x >= m || y < 0 || y >= n) || visited[x][y]  {
 			return
 		}
@@ -82,17 +82,17 @@ func Constructor() Trie {
 
 /** Inserts a word into the trie. */
 func (this *Trie) Insert(word string)  {
-	this.root = this.insert(this.root, word, 0)
+	this.root = this.insert(this.root, word, len(word), 0)
 }
 
-func (this *Trie) insert(x *node, key string, d int) *node {
+func (this *Trie) insert(x *node, key string, keylength, d int) *node {
 	if x == nil {
 		x = &node{}
 	}
-	if d == len(key) {
+	if d == keylength {
 		x.isString = true
 	} else {
-		x.next[key[d]-97] = this.insert(x.next[key[d]-97], key, d+1)
+		x.next[key[d]-97] = this.insert(x.next[key[d]-97], key, keylength, d+1)
 	}
 	return x
 }
@@ -100,28 +100,28 @@ func (this *Trie) insert(x *node, key string, d int) *node {
 
 /** Returns if the word is in the trie. */
 func (this *Trie) Search(word string) bool {
-	x := this.get(this.root, word, 0)
+	x := this.get(this.root, word, len(word), 0)
 	if x == nil {
 		return false
 	}
 	return x.isString
 }
 
-func (this *Trie) get(x *node, key string, d int) *node {
+func (this *Trie) get(x *node, key string, keylength, d int) *node {
 	if x == nil {
 		return nil
 	}
-	if d == len(key) {
+	if d == keylength {
 		return x
 	}
-	return this.get(x.next[key[d]-97], key, d+1)
+	return this.get(x.next[key[d]-97], key, keylength, d+1)
 }
 
 /** Returns if there is any word in the trie that starts with the given prefix. */
 func (this *Trie) StartsWith(prefix string) bool {
 	var b bytes.Buffer
 	b.WriteString(prefix)
-	return this.collectPrefix(this.get(this.root, prefix, 0), &b)
+	return this.collectPrefix(this.get(this.root, prefix, len(prefix), 0), &b)
 }
 
 func (this *Trie) collectPrefix(x *node, prefix *bytes.Buffer) bool {
