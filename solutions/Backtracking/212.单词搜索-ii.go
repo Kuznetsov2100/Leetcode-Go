@@ -5,7 +5,11 @@
  */
 
 // @lc code=start
-import "bytes"
+// 思路： 使用字典树(trie)的回溯
+// step1 : 根据字典中的单词构建一个trie
+// step2 : 对board中每个单元格使用回溯搜索
+// 在dfs中，检查到目前为止遍历的字母序列是否是字典树中任一单词的前缀，
+// 可以及时停止回溯
 func findWords(board [][]byte, words []string) []string {
 	var res []string
 	m := len(board)
@@ -13,9 +17,6 @@ func findWords(board [][]byte, words []string) []string {
 		return res
 	}
 	n := len(board[0])
-	set := make(map[string]bool)
-	prefix := make(map[string]bool)
-
 	wordtrie := Constructor()
 	for i := range words {
 		wordtrie.Insert(words[i])
@@ -26,119 +27,60 @@ func findWords(board [][]byte, words []string) []string {
 		visited[i] = make([]bool, n)
 	}
 	
-	var dfs func(x, y int, word []byte) 
-	dfs = func(x, y int, word []byte) {
+	var dfs func(x, y int, node *Trie) 
+	dfs = func(x, y int, node *Trie) {
 		// 首先确保是棋盘内的合法坐标，其次该点没有访问过， 任一条件不满足,  return
 		if (x < 0 || x >= m || y < 0 || y >= n) || visited[x][y]  {
 			return
 		}
-		word = append(word, board[x][y])
-		str := string(word)
-		if !prefix[str] {
-			if !wordtrie.StartsWith(str) {
-				return
-			}
-			prefix[str] = true
+		node = node.children[board[x][y]-'a']
+		if node == nil {
+			return
 		}
-
-		if wordtrie.Search(str) {
-			if !set[str] {
-				res = append(res, str)
-				set[str] = true
-			}
-		}	
-
+		if node.isEnd {
+			res = append(res, node.str)
+			node.isEnd = false // 防止重复添加单词
+		}
 		visited[x][y] = true
-		dfs(x, y+1, word)
-		dfs(x+1, y, word)
-		dfs(x, y-1, word)
-		dfs(x-1, y, word)	
+		dfs(x, y+1, node)
+		dfs(x+1, y, node)
+		dfs(x, y-1, node)
+		dfs(x-1, y, node)	
 		visited[x][y] = false	
 	}
 
 	for i := 0; i < m; i++ {
 		for j := 0; j < n; j++ {
-			dfs(i, j, []byte{})
+			dfs(i, j, &wordtrie)
 		}
 	}
 	return res
 }
 
+
 type Trie struct {
-	root *node
+	isEnd bool
+	str string
+	children [26]*Trie
 }
-
-type node struct {
-	isString bool
-	next [26]*node
-}
-
 
 /** Initialize your data structure here. */
 func Constructor() Trie {
 	return Trie{}
 }
 
-
 /** Inserts a word into the trie. */
 func (this *Trie) Insert(word string)  {
-	this.root = this.insert(this.root, word, len(word), 0)
-}
-
-func (this *Trie) insert(x *node, key string, keylength, d int) *node {
-	if x == nil {
-		x = &node{}
-	}
-	if d == keylength {
-		x.isString = true
-	} else {
-		x.next[key[d]-97] = this.insert(x.next[key[d]-97], key, keylength, d+1)
-	}
-	return x
-}
-
-
-/** Returns if the word is in the trie. */
-func (this *Trie) Search(word string) bool {
-	x := this.get(this.root, word, len(word), 0)
-	if x == nil {
-		return false
-	}
-	return x.isString
-}
-
-func (this *Trie) get(x *node, key string, keylength, d int) *node {
-	if x == nil {
-		return nil
-	}
-	if d == keylength {
-		return x
-	}
-	return this.get(x.next[key[d]-97], key, keylength, d+1)
-}
-
-/** Returns if there is any word in the trie that starts with the given prefix. */
-func (this *Trie) StartsWith(prefix string) bool {
-	var b bytes.Buffer
-	b.WriteString(prefix)
-	return this.collectPrefix(this.get(this.root, prefix, len(prefix), 0), &b)
-}
-
-func (this *Trie) collectPrefix(x *node, prefix *bytes.Buffer) bool {
-	if x == nil {
-		return false
-	}	
-	if x.isString {
-		return true
-	}
-	for c := 97; c <= 122; c++ {
-		prefix.WriteByte(byte(c))
-		if this.collectPrefix(x.next[c-97], prefix) {
-			return true
+	node := this
+	for _, ch := range word {
+		index := ch-'a'
+		if node.children[index] == nil {
+			node.children[index] = &Trie{} 
 		}
-		prefix.Truncate(prefix.Len()-1)
+		node = node.children[index]
 	}
-	return false
+	node.str =  word
+	node.isEnd = true
 }
 // @lc code=end
 
