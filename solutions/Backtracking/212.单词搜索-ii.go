@@ -35,7 +35,7 @@ func findWords(board [][]byte, words []string) []string {
 		word = append(word, board[x][y])
 		str := string(word)
 		if !prefix[str] {
-			if !wordtrie.StartsWith(string(str)) {
+			if !wordtrie.StartsWith(str) {
 				return
 			}
 			prefix[str] = true
