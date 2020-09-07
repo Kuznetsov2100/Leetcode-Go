@@ -5,16 +5,11 @@
  */
 
 // @lc code=start
-import "bytes"
 type WordDictionary struct {
-	root *node
-
+	isEnd bool
+	children [26]*WordDictionary
 }
 
-type node struct {
-	isString bool
-	next [26]*node
-}
 
 /** Initialize your data structure here. */
 func Constructor() WordDictionary {
@@ -24,34 +19,30 @@ func Constructor() WordDictionary {
 
 /** Adds a word into the data structure. */
 func (this *WordDictionary) AddWord(word string)  {
-	this.root = this.insert(this.root, word, len(word), 0)
-}
-
-func (this *WordDictionary) insert(x *node, key string, keylength, d int) *node {
-	if x == nil {
-		x = &node{}
+	node := this
+	for _, ch := range word {
+		index := ch-'a'
+		if node.children[index] == nil {
+			node.children[index] = &WordDictionary{} 
+		}
+		node = node.children[index]
 	}
-	if d == keylength {
-		x.isString = true
-	} else {
-		x.next[key[d]-97] = this.insert(x.next[key[d]-97], key, keylength, d+1)
-	}
-	return x
+	node.isEnd =  true
 }
 
 /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
 func (this *WordDictionary) Search(word string) bool {
 	var b bytes.Buffer
-	return this.collectMatch(this.root, &b, word, len(word))
+	return this.collectMatch(this, &b, word, len(word))
 }
 
-func (this *WordDictionary) collectMatch(x *node, prefix *bytes.Buffer, pattern string, plen int) bool {
+func (this *WordDictionary) collectMatch(x *WordDictionary, prefix *bytes.Buffer, pattern string, plen int) bool {
 	if x == nil {
 		return false
 	}	
 	d := prefix.Len()
 	if d == plen {
-		if x.isString {
+		if x.isEnd {
 			return true
 		}
 		return false
@@ -60,14 +51,14 @@ func (this *WordDictionary) collectMatch(x *node, prefix *bytes.Buffer, pattern 
 	if c := pattern[d]; c == '.' {
 		for ch := 97; ch <= 122; ch++ {
 			prefix.WriteByte(byte(ch))
-			if this.collectMatch(x.next[ch-97], prefix, pattern, plen) {
+			if this.collectMatch(x.children[ch-97], prefix, pattern, plen) {
 				return true
 			}
 			prefix.Truncate(prefix.Len()-1)
 		}
 	} else {
 		prefix.WriteByte(c)
-		if this.collectMatch(x.next[c-97], prefix, pattern, plen) {
+		if this.collectMatch(x.children[c-97], prefix, pattern, plen) {
 			return true
 		}
 		prefix.Truncate(prefix.Len()-1)
