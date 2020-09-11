@@ -8,7 +8,7 @@
 func findUnsortedSubarray(nums []int) int {
 	var stackUp, stackDown []int // stackUp为单调递增栈，stackDown为单调递减栈
 	n := len(nums)
-	left, right := n, 0
+	left, right := n-1, 0
 	for i, j := 0, n-1; i < n && j >= 0; i,j = i+1, j-1 {
 		// 从左到右找到最后一个破坏递增关系的元素的索引
 		for len(stackUp) > 0 && nums[stackUp[len(stackUp)-1]] > nums[i] {
