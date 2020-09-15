@@ -12,8 +12,7 @@ func accountsMerge(accounts [][]string) [][]string {
 	uf := NewUF(len(accounts)) // 初始化union-find对象
 	for i, account := range accounts {
 		for _, email := range account[1:] {
-			id, ok := email_id[email]
-			if !ok {
+			if id, ok := email_id[email]; !ok {
 				email_id[email] = i // 建立email -> id映射关系
 			} else {
 				uf.Union(id, i) // 合并账户
