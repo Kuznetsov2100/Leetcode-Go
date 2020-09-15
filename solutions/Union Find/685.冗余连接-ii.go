@@ -13,6 +13,7 @@ func findRedundantDirectedConnection(edges [][]int) []int {
 	// 如果Count>2, 删除(C->A)后， 剩下的图无法形成N个节点的有根树，则边(B->A)是正确答案
 	var indegree2, first, second int
 	N := len(edges)
+	uf := NewUF(N+1)
 	indegree := make(map[int][]int)
 	for _, edge := range edges {
 		indegree[edge[1]] = append(indegree[edge[1]], edge[0])
@@ -24,8 +25,7 @@ func findRedundantDirectedConnection(edges [][]int) []int {
 	}
 	
 	if indegree2 == 0 {
-		var res []int
-		uf := NewUF(N+1)
+		var res []int	
 		for _, edge := range edges {
 			u, v := edge[0], edge[1]
 			if uf.IsConnected(u,v) {
@@ -34,21 +34,19 @@ func findRedundantDirectedConnection(edges [][]int) []int {
 			uf.Union(u, v)
 		}
 		return res
-	}
-
-	uf1 := NewUF(N+1)
-	for i := N-1; i >= 0; i-- {
-		u, v := edges[i][0], edges[i][1]
-		if v == indegree2 && u == second {
-			continue
+	} else {
+		for i := N-1; i >= 0; i-- {
+			u, v := edges[i][0], edges[i][1]
+			if v == indegree2 && u == second {
+				continue
+			}
+			uf.Union(u,v)
 		}
-		uf1.Union(u,v)
-	}
-
-	if uf1.Count() == 2 {
-		return []int{second, indegree2}
-	}
-	return []int{first, indegree2}
+		if uf.Count() == 2 {
+			return []int{second, indegree2}
+		}
+		return []int{first, indegree2}
+	}	
 }
 
 type UF struct {
