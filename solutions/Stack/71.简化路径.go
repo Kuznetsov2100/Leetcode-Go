@@ -6,10 +6,8 @@
 
 // @lc code=start
 func simplifyPath(path string) string {
-	var res strings.Builder
 	var stack []string
-	str := strings.Split(path, "/")
-	for _, s := range str {
+	for _, s := range strings.Split(path, "/") {
 		if s == ".." {
 			if len(stack) > 0 {
 				stack = stack[:len(stack)-1] // 出栈
@@ -18,14 +16,7 @@ func simplifyPath(path string) string {
 			stack = append(stack, s)
 		}
 	}
-	if len(stack) == 0 { // 栈为空， 返回"/"
-		return "/"
-	}
-	// 从栈底到栈顶，拼接结果字符串
-	for _, s := range stack { 
-		res.WriteString("/"+s)
-	}
-	return res.String()
+	return "/" + strings.Join(stack, "/")
 }
 // @lc code=end
 
