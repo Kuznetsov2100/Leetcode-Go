@@ -7,31 +7,20 @@
 // @lc code=start
 func maxScore(s string) int {
 	var res int
-	for i := 1; i < len(s); i++ {
-		res = max(res, count0(s[:i])+count1(s[i:]))
-	}
-	return res
-}
-
-func count0(s string) int {
-	var res int
-	for i := range s {
-		if s[i] == '0' {
-			res++
-		}
-	}
-	return res
-}
-
-func count1(s string) int {
-	var res int
-	for i := range s {
+	count1 := strings.Count(s, "1")
+	count0 := 0
+	for i := 0; i < len(s)-1; i++ {
 		if s[i] == '1' {
-			res++
+			count1--
+		} else {
+			count0++
 		}
+		res = max(res, count0+count1)
 	}
 	return res
 }
+
+
 
 func max(x, y int) int {
 	if x > y {
