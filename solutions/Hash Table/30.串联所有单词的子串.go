@@ -11,7 +11,6 @@ func findSubstring(s string, words []string) []int {
 	for _, word := range words {
 		seen[word]++
 	}
-
 	check := func(s string) bool {
 		existed := make(map[string]int)
 		for i := 0; i+m <= m*n; i=i+m {
