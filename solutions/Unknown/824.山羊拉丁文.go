@@ -16,12 +16,13 @@ func toGoatLatin(S string) string {
 		}
 		return false
 	}
-
-	for i, w := range strings.Split(S, " ") {
+	var b bytes.Buffer
+	for _, w := range strings.Split(S, " ") {
+		b.WriteByte('a')
 		if isVowel(w[0]) {
-			words = append(words, w + "ma" + strings.Repeat("a", i+1))
+			words = append(words, w + "ma" + b.String())
 		} else {
-			words = append(words, w[1:] + w[:1] + "ma" + strings.Repeat("a", i+1))
+			words = append(words, w[1:] + w[:1] + "ma" + b.String())
 		}	
 	}
 	return strings.Join(words, " ")
