@@ -7,7 +7,7 @@
 // @lc code=start
 func licenseKeyFormatting(S string, K int) string {
 	var res bytes.Buffer
-	strb := []byte(strings.Join(strings.Split(strings.ToUpper(S), "-"), ""))
+	strb := []byte(strings.ReplaceAll(strings.ToUpper(S), "-", ""))
 	n, part1Len, cnt := len(strb), 1, 0
 	
 	for part1Len < n {
