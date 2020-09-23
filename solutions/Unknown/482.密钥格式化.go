@@ -7,8 +7,8 @@
 // @lc code=start
 func licenseKeyFormatting(S string, K int) string {
 	var res bytes.Buffer
-	strb := []byte(strings.ReplaceAll(strings.ToUpper(S), "-", ""))
-	n, part1Len, cnt := len(strb), 1, 0
+	S = strings.ReplaceAll(S, "-", "")
+	n, part1Len, cnt := len(S), 1, 0
 	
 	for part1Len < n {
 		if (n-part1Len) % K == 0 {
@@ -17,7 +17,11 @@ func licenseKeyFormatting(S string, K int) string {
 		part1Len++
 	}
 
-	for i, ch := range strb {
+	for i := range S {
+		ch := S[i]
+		if 'a' <= ch && ch <= 'z' {
+			ch -= 32
+		}
 		if i >= part1Len {
 			if cnt % K == 0 {
 				res.WriteByte('-')
