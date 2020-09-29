@@ -18,11 +18,11 @@ func checkIfCanBreak(s1 string, s2 string) bool {
 		if s1b[i] >= s2b[i] {
 			greatercount++
 		}
+		if smallercount < i+1 && greatercount < i+1 {
+			return false
+		}
 	}
-	if smallercount == n || greatercount == n {
-		return true
-	}
-	return false
+	return true
 }
 // @lc code=end
 
