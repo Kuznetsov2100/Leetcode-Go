@@ -8,24 +8,25 @@
 func printVertically(s string) []string {
 	var res []string
 	var b bytes.Buffer
-	var maxlen int
 	strs := strings.Split(s, " ")
-	for i := range strs {
-		if x := len(strs[i]); x > maxlen {
-			maxlen = x
-		}
-	}
-	
-	for i := 0; i < maxlen; i++ {
-		for j := 0; j < len(strs); j++ {
+	n := len(strs)
+	i := 0
+	for {
+		count := 0
+		for j := 0; j < n; j++ {
 			if i < len(strs[j]) {
 				b.WriteByte(strs[j][i])
 			} else {
 				b.WriteByte(' ')
+				count++
 			}
+		}
+		if count == n {
+			break
 		}
 		res = append(res, strings.TrimRight(b.String(), " "))
 		b.Reset()
+		i++
 	}
 	return res
 }
