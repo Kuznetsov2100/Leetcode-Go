@@ -7,33 +7,32 @@
 // @lc code=start
 func numSplits(s string) int {
 	n := len(s)
-	dp1 := make([]int, n+1)
-	set1 := make(map[byte]bool)
+	dpLeft := make([]int, n+1)
+	dpRight := make([]int, n+1)
+	setLeft := make([]bool, 26)
+	setRight := make([]bool, 26)
 	for i := 1; i <= n; i++ {
-		if set1[s[i-1]] {
-			dp1[i] = dp1[i-1]
+		if setLeft[s[i-1]-'a'] {
+			dpLeft[i] = dpLeft[i-1]
 		} else {
-			dp1[i] = dp1[i-1] + 1
-			set1[s[i-1]] = true
+			dpLeft[i] = dpLeft[i-1] + 1
+			setLeft[s[i-1]-'a'] = true
 		}
 	}
 	
-
-	dp2 := make([]int, n+1)
-	set2 := make(map[byte]bool)
 	for i := n-1; i >= 0; i-- {
-		if set2[s[i]] {
-			dp2[n-i] = dp2[n-i-1] 
+		if setRight[s[i]-'a'] {
+			dpRight[n-i] = dpRight[n-i-1] 
 		} else {
-			dp2[n-i] = dp2[n-i-1] + 1
-			set2[s[i]] = true
+			dpRight[n-i] = dpRight[n-i-1] + 1
+			setRight[s[i]-'a'] = true
 		}
 	}
 
 	
 	var res int
-	for i := 0; i < n; i++ {
-		if dp1[i+1] == dp2[n-i-1] {
+	for i := 1; i < n; i++ {
+		if dpLeft[i] == dpRight[n-i] {
 			res++
 		}
 	}
