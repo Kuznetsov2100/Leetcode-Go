@@ -28,15 +28,15 @@ func Constructor(head *ListNode) Solution {
 /** Returns a random node's value. */
 func (this *Solution) GetRandom() int {
         // 蓄水池抽样算法
-        i := 2
-        res := this.head.Val
-        cur := this.head.Next
+        var res int
+        i := 1
+        cur := this.head        
         for cur != nil {
                 if rand.Intn(i) == 0 {
                     res = cur.Val
                 }
-                i++
                 cur = cur.Next
+                i++
         }
         return res
 }
