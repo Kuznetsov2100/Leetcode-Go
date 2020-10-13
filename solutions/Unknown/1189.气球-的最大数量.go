@@ -6,20 +6,22 @@
 
 // @lc code=start
 func maxNumberOfBalloons(text string) int {
-	m := make([]int, 26)
+	var b,a,n,l,o int
 	for i := range text {
-		m[text[i]-'a']++
-	}
-	banCount, loCount := math.MaxInt64, math.MaxInt64
-	for i, count := range m {
-		alpha := i+'a'
-		if alpha == 'b'  || alpha == 'a' || alpha == 'n' {
-			banCount = min(banCount, count)
-		} else if alpha == 'l' || alpha == 'o' {
-			loCount = min(loCount, count)
+		switch text[i] {
+			case 'b':
+				b++
+			case 'a':
+				a++
+			case 'n':
+				n++
+			case 'l':
+				l++
+			case 'o':
+				o++
 		}
 	}
-	return min(banCount, loCount/2)
+	return min(min(min(b, a), n),min(l, o)/2)
 }
 
 func min(x, y int) int {
