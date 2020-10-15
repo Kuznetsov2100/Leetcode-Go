@@ -14,25 +14,39 @@
  * }
  */
 func rangeSumBST(root *TreeNode, L int, R int) int {
-	var res int
 	if root == nil {
-		return res
+		return 0
 	}
-	var inorder func(x *TreeNode)
-	inorder = func(x *TreeNode)	{
-		if x == nil {
-			return
-		}
-		inorder(x.Left)
-		if x.Val >= L && x.Val <= R {
-			res += x.Val
-		}
-		inorder(x.Right)
+	if root.Val < L {
+		return rangeSumBST(root.Right, L, R)
+	} else if root.Val > R {
+		return rangeSumBST(root.Left, L, R)
 	}
-	inorder(root)
-	return res
-	
-
+	return root.Val + rangeSumBST(root.Left, L, R) + rangeSumBST(root.Right, L, R)
 }
+
+
+// 第一版: 中序遍历
+// func rangeSumBST(root *TreeNode, L int, R int) int {
+// 	var res int
+// 	if root == nil {
+// 		return res
+// 	}
+// 	var inorder func(x *TreeNode)
+// 	inorder = func(x *TreeNode)	{
+// 		if x == nil {
+// 			return
+// 		}
+// 		inorder(x.Left)
+// 		if x.Val >= L && x.Val <= R {
+// 			res += x.Val
+// 		} else if x.Val > R {
+// 			return
+// 		}
+// 		inorder(x.Right)
+// 	}
+// 	inorder(root)
+// 	return res
+// }
 // @lc code=end
 
