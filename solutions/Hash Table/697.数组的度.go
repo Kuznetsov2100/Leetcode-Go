@@ -6,7 +6,7 @@
 
 // @lc code=start
 func findShortestSubArray(nums []int) int {
-	res, maxFrequency := 50001, 0
+	res, maxFrequency := 50001, 1
 	m := make(map[int]*Number)
 	for i, num := range nums {
 		if _, ok := m[num]; !ok {
@@ -14,30 +14,24 @@ func findShortestSubArray(nums []int) int {
 		} else {
 			m[num].count++
 			m[num].lastIndex = i
-		}
-		if c := m[num].count; c > maxFrequency {
-			maxFrequency = c
+			if c := m[num].count; c > maxFrequency {
+				maxFrequency = c
+			}
 		}
 	}
 	for _, number := range m {
 		if number.count == maxFrequency {
-			res = min(res, number.lastIndex-number.firstIndex+1)
+			length := number.lastIndex-number.firstIndex+1
+			if length < res {
+				res = length
+			}
 		}
 	}
 	return res
 }
 
 type Number struct {
-	count int
-	firstIndex int
-	lastIndex int
-}
-
-func min(x, y int) int {
-	if x < y {
-		return x
-	}
-	return y
+	count, firstIndex, lastIndex int
 }
 // @lc code=end
 
