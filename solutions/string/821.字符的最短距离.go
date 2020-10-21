@@ -15,11 +15,11 @@ func shortestToChar(S string, C byte) []int {
 	for i := range S {
 		if S[i] == C {
 			res[i] = 0
-			leftIndex = rightIndex
+			leftIndex = i
 			if index := strings.IndexByte(S[i+1:], C); index == -1 {
 				rightIndex = 100000
 			} else {
-				rightIndex += index+1
+				rightIndex = i+index+1
 			}
 		} else {
 			res[i] = min(rightIndex-i, i-leftIndex)
