@@ -6,13 +6,10 @@
 
 // @lc code=start
 func gcdOfStrings(str1 string, str2 string) string {
-	m, n := len(str1), len(str2)
-	commonDivisor := gcd(m, n)
-	res := str1[:commonDivisor]
-	if strings.Repeat(res, m/commonDivisor) != str1 || strings.Repeat(res, n/commonDivisor) != str2 {
+	if str1 + str2 != str2 + str1 {
 		return ""
 	}
-	return res
+	return str1[:gcd(len(str1), len(str2))]
 }
 
 func gcd(a, b int) int {
