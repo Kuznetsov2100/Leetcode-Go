@@ -14,9 +14,8 @@ func minimumAbsDifference(arr []int) [][]int {
 		if diff == min {
 			res = append(res, []int{arr[i], arr[i+1]})
 		} else if diff < min {
-			res = nil
-			res = append(res, []int{arr[i], arr[i+1]})
 			min = diff
+			res = [][]int{{arr[i], arr[i+1]}}
 		}
 	}
 	return res
