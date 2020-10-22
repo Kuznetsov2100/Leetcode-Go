@@ -13,19 +13,14 @@ func sumEvenAfterQueries(A []int, queries [][]int) []int {
 			evenSum += num
 		}
 	}
-	for i, q := range queries {
-		keep := A[q[1]]
-		A[q[1]] += q[0]
-		if keep % 2 == 0 {
-			if q[0] % 2 ==  0 {
-				evenSum += q[0]
-			} else {
-				evenSum -= keep
-			}
-		} else {
-			if q[0] % 2 != 0 {
-				evenSum += A[q[1]]
-			}
+	for i := range queries {
+		val, index := queries[i][0], queries[i][1]
+		if A[index] % 2 == 0 {
+			evenSum -= A[index]
+		}
+		A[index] += val
+		if A[index] % 2 == 0 {
+			evenSum += A[index]
 		}
 		res[i] = evenSum
 	}
