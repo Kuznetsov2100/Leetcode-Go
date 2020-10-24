@@ -7,12 +7,14 @@
 // @lc code=start
 func rotate(nums []int, k int)  {
 	n := len(nums)
-	if k == n {
-		return
-	} else if k > n {
-		k = k % n
+	k = k % n
+	if k != 0 {
+		res := make([]int, n)
+		copy(res, nums)
+		for i := 0; i < n; i++ {
+			nums[i] = res[(n-k+i) % n]
+		}
 	}
-	copy(nums,  append(nums[n-k:],nums[:n-k]...))
 }
 // @lc code=end
 
