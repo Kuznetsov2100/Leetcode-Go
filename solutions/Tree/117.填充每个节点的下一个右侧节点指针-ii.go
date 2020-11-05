@@ -34,17 +34,18 @@ func connect(root *Node) *Node {
 	return root
 }
 
+// 递归版本改成迭代版本
 func helper(x *Node) *Node {
-	if x == nil {
-		return nil
+	for x != nil {
+		if x.Left != nil {
+			return x.Left
+		}
+		if x.Right != nil {
+			return x.Right
+		}
+		x = x.Next
 	}
-	if x.Left != nil {
-		return x.Left
-	}
-	if x.Right != nil {
-		return x.Right
-	}
-	return helper(x.Next)
+	return nil
 }
 // @lc code=end
 
