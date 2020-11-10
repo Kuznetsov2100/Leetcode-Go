@@ -26,6 +26,7 @@ func countRangeSum(nums []int, lower int, upper int) int {
             kth[allNums[i]] = k
         }
 	}
+	
 	root := buildSegmentTree(1, k)
 	update(kth[0], root)
 	for _, sum := range preSum[1:] {
