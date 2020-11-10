@@ -6,33 +6,42 @@
 
 // @lc code=start
 func countRangeSum(nums []int, lower int, upper int) int {
+	// 关键词：前缀和，数据离散化，线段树
+	// 题意求数组内任意区间和的范围在[lower, upper]的个数，
+	// lower <= S(i, j) <= upper，
+	// lower <= prefixSum[j]-prefixSum[i-1] <= upper,
+	// lower+prefixSum[i-1] <= prefixSum[j] <= upper+prefixSum[i-1]
+	// 数据离散化的原因：prefixSum数组中的数字之间的间隔可能很大，不方便构造线段树，
+	// 利用哈希将它映射到一段连续的区间，要注意在映射之前需将allNums数组排序，
+	// 否则会破坏线段树中的节点定义。
 	var res int
 	n := len(nums)
-	// 计算前缀和 preSum，以及后面统计时会用到的所有数字 allNums
-    allNums := make([]int, 1, 3*n+1)
-    preSum := make([]int, n+1)
-    for i, v := range nums {
-        preSum[i+1] = preSum[i] + v
-        allNums = append(allNums, preSum[i+1], preSum[i+1]-lower, preSum[i+1]-upper)
-    }
+	if n == 0 {
+		return res
+	}
 
-    // 将 allNums 离散化
-    sort.Ints(allNums)
-    k := 1
-    kth := map[int]int{allNums[0]: k}
-    for i := 1; i <= 3*n; i++ {
-        if allNums[i] != allNums[i-1] {
-            k++
-            kth[allNums[i]] = k
-        }
+	var allNums []int
+	prefixSum := make([]int, n+1) // 前缀和
+	for i := 0; i < n; i++ {
+		prefixSum[i+1] = prefixSum[i] + nums[i]
+		allNums = append(allNums, prefixSum[i+1], prefixSum[i]+lower, prefixSum[i]+upper)
+	}
+	sort.Ints(allNums)
+	m := make(map[int]int)
+	index := 0
+	for _, num := range allNums {
+		if _, ok := m[num]; !ok {
+			m[num] = index
+			index++
+		}
 	}
 	
-	root := buildSegmentTree(1, k)
-	update(kth[0], root)
-	for _, sum := range preSum[1:] {
-		left, right := kth[sum-upper], kth[sum-lower]
-        res += query(left, right, root)
-        update(kth[sum], root)
+	root := buildSegmentTree(0, index-1) // 在区间[0, index-1]上构造线段树
+	for i := n-1; i >= 0; i-- {
+		update(m[prefixSum[i+1]], root) // update操作将prefixSum[i+1]的映射值加入线段树中
+		// 通过查询区间[m[lower+prefixSum[i]], m[upper+prefixSum[i]]],
+		// 即可知道S(i, i), S(i, i+1), S(i, i+2)....S(i, j)落在[lower, upper]的个数， i <= j
+		res += query(m[lower+prefixSum[i]], m[upper+prefixSum[i]], root)
 	}
 	return res
 }
